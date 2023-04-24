@@ -1,8 +1,11 @@
-FROM golang:1.20.0-alpine3.13
+FROM golang:1.20 AS builder
 
 WORKDIR /usr/src/app
 
+COPY . .
 
+RUN go build -buildvcs=false
 
-#  AS builder
-
+FROM scratch
+COPY --from=builder /usr/src/app/rocks .
+CMD ["./rocks"]
